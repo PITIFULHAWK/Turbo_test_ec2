@@ -18,7 +18,7 @@ jobs:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           port: 22
           script: |
-            APP_DIR="/home/ec2-user/Turbo_test_ec2/"
+            APP_DIR="/home/${{secrets.EC2_USER}}/Turbo_test_ec2/"
             echo "Navigating to app directory: $APP_DIR"
             cd $APP_DIR
             echo "Pulling latest changes..."
