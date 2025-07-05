@@ -7,6 +7,7 @@ export default async function Home() {
     <div>
       UserName: {user?.username}
       Password: {user?.password}
+kshujdfikusdhfiujhedrsijghbdfjikbfglkjhgbhkujftb
     </div>
   );
 }
