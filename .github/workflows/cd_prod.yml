@@ -1,0 +1,37 @@
+name: Deploy to prod
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  redeploy_everything:
+    runs-on: ubuntu-latest
+    name: Deploying everything to the staging cluster
+
+    steps:
+      - name: Deploy to EC2 and Restart APPs
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{secrets.EC2_HOST_prod}}
+          username: ${{secrets.EC2_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          port: 22
+          script: |
+            export PATH="/home/ubuntu/.bun/bin:$PATH"
+            APP_DIR="/home/${{secrets.EC2_USER}}/Turbo_test_ec2/"
+            echo "Navigating to app directory: $APP_DIR"
+            cd $APP_DIR
+            echo "Pulling latest changes..."
+            git pull origin production
+            echo "Install bun dep (in prod)"
+            bun install --production
+            echo "Building Bun application (if necessary)"
+            bun run build
+            echo "Restarting Bun service via systemd..."
+            pm2 restart http-server
+            pm2 restart ws-server
+            pm2 restart next
+            echo "Checking service status..."
+            pm2 list
+            echo "Deployment complete!"
