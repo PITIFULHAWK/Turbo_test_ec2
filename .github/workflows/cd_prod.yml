@@ -23,7 +23,7 @@ jobs:
             echo "Navigating to app directory: $APP_DIR"
             cd $APP_DIR
             echo "Pulling latest changes..."
-            git pull origin master
+            git pull origin production
             echo "Install bun dep (in prod)"
             bun install --production
             echo "Building Bun application (if necessary)"
